@@ -13,6 +13,10 @@ use strict;
 sub run
 {
   my ($e, @args) = @_;
+
+  # Perform a type check
+  $e->type;
+
   $e->compile->(@args);
 }
 
@@ -35,20 +39,13 @@ my $twice = function(
 
 my $twice_add_one = application($twice, $add_one);
 
-my $app_code = $app->compile;
-print "app = ".$app_code->()."\n";
+print "app = ".run($app)."\n";
 
-my $add_one_code = $add_one->compile;
-print "add_one 2 = ".$add_one_code->(2)."\n";
+print "add_one 2 = ".run($add_one, 2)."\n";
 
-my $twice_code = $twice->compile;
-print "(twice add_one) 3 = ".$twice_code->($add_one_code)->(3)."\n";
+print "(twice add_one) 3 = ".run(application($twice, $add_one, $three))."\n";
 
-my $twice_add_one_code = $twice_add_one->compile;
-print $twice_add_one_code->()->(4)."\n";
-
-$app = application($twice_add_one, $two)->compile;
-print "twice_add_one 2 = ".$app->()."\n";
+print "twice_add_one 2 = ".run(application($twice_add_one, $two))."\n";
 
 # Binary function test
 my $plus = curried(

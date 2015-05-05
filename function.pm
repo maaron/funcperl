@@ -6,14 +6,13 @@ sub function
 {
   my ($type, $impl) = @_;
 
-  if (ref $type ne 'type' && ref $type ne 'arrow') { confess "Illegal type $type"; }
-
   return bless {type => $type, impl => $impl}, 'function';
 }
 
 package function;
+use Carp qw(confess);
 
-sub typecheck
+sub type
 {
   my ($f) = @_;
   return $f->{type};
@@ -22,6 +21,24 @@ sub typecheck
 sub compile
 {
   my ($f) = @_;
+
+  my $type = $f->{type};
+
+  if (ref $type eq 'type')
+  {
+    if (ref $f->{impl} eq 'CODE')
+    {
+      confess "Code reference not expected for a value of type ".$type->name;
+    }
+  }
+  elsif (ref $type eq 'arrow')
+  {
+    if (ref $f->{impl} ne 'CODE')
+    {
+      confess "Expected a code reference for a function type ".$type->name;
+    }
+  }
+  else { confess "Illegal type $type"; }
 
   return $f->{impl};
 }
