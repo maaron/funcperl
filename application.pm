@@ -25,23 +25,21 @@ sub application
 
 package application;
 
-sub typecheck
+sub type
 {
   my ($a) = @_;
 
   my $lhs = $a->{left};
   my $rhs = $a->{right};
 
-  my $ltype = $lhs->typecheck;
-  my $rtype = $rhs->typecheck;
+  my $ltype = $lhs->type;
+  my $rtype = $rhs->type;
   return $ltype->apply($rtype);
 }
 
 sub compile
 {
   my ($a) = @_;
-
-  $a->typecheck;
 
   my $left = $a->{left};
   my $right = $a->{right};
