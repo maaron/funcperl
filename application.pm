@@ -3,8 +3,24 @@ use strict;
 
 sub application
 {
-  my ($lhs, $rhs) = @_;
-  return bless {left => $lhs, right => $rhs}, 'application';
+  if (@_ == 1)
+  {
+    confess "Wrong number of arguments";
+  }
+
+  my $lhs = shift @_;
+  my $rhs = shift @_;
+
+  my $app = bless {left => $lhs, right => $rhs}, 'application';
+
+  if (@_ > 0)
+  {
+    return application($app, @_);
+  }
+  else
+  {
+    return $app;
+  }
 }
 
 package application;

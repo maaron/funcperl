@@ -15,9 +15,23 @@ sub type
 # Creates a new function type of the form 'a -> b'
 sub arrow
 {
-  my ($left, $right) = @_;
-  my $type = bless {left => $left, right => $right}, 'arrow';
-  return $type;
+  my $left = shift @_;
+  my $right;
+
+  if (@_ == 0)
+  {
+    confess "Wrong number of arguments";
+  }
+  elsif (@_ == 1)
+  {
+    $right = shift @_;
+  }
+  else
+  {
+    $right = arrow(@_);
+  }
+
+  return bless {left => $left, right => $right}, 'arrow';
 }
 
 package type;

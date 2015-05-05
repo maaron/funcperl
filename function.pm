@@ -23,7 +23,7 @@ sub compile
 {
   my ($f) = @_;
 
-  return return $f->{impl};
+  return $f->{impl};
 }
 
 1;
