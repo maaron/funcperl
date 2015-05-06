@@ -7,6 +7,7 @@ use functional;
 use function;
 use type;
 use application;
+use lisp;
 
 use strict;
 
@@ -157,4 +158,6 @@ print "if 0 then 1 else 2 = ".run(application(cond($scalar), $false,
 print "if 1 then 1 else 2 = ".run(application(cond($scalar), $true, 
     nullary_constant('one'), nullary_constant('two')))."\n";
 
-  
+my $lisp_code = q{(asdf (qwer (asdf qwer) zxcv))};
+
+print Dumper(lisp::parse $lisp_code);
