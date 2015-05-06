@@ -100,9 +100,14 @@ sub elements
 
 sub parse
 {
-  my ($data) = @_;
+  my $in = \$_[0];
 
-  return list(\$data);
+  my $list = list($in);
+
+  whitespace $in;
+
+  return (end $in) ? $list
+    : fail $in, 'Extra characters';
 }
 
 1;

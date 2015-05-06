@@ -4,10 +4,10 @@ use Data::Dumper;
 $Data::Dumper::Indent = 1;
 
 use functional;
-use function;
-use type;
-use application;
-use lisp;
+use functional::function;
+use functional::type;
+use functional::application;
+use functional::lisp;
 
 use strict;
 
