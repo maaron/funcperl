@@ -10,11 +10,13 @@ sub function
 }
 
 package function;
+use Data::Dumper;
 use Carp qw(confess);
 
 sub type
 {
-  my ($f) = @_;
+  my ($f, $arg) = @_;
+
   return $f->{type};
 }
 

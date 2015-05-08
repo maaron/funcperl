@@ -5,8 +5,16 @@ use Carp qw(confess);
 use strict;
 
 # This package is used to parse lisp-style syntax into a Perl data structure.
-# A list is represented in Perl as an array reference scalars and/or array
+# A list is represented in Perl as an array of scalars and/or array
 # references.
+
+my $lparen = quotemeta('[');
+my $rparen = quotemeta(']');
+my $quote = quotemeta('"');
+
+sub set_lparen { $lparen = quotemeta($_[0]); }
+sub set_rparen { $rparen = quotemeta($_[0]); }
+sub set_quote  { $quote = quotemeta($_[0]); }
 
 sub fail
 {
@@ -39,8 +47,9 @@ sub token
 
   debug $in, 'parsing token';
 
-  $$in =~ /\G([^ \(\)]+)/gc;
-  return $1;
+  my $pos = pos($$in);
+  return ($$in =~ /\G($quote(?:\\$quote|[^$quote])*$quote|[^ $lparen $rparen]+)/gc) ?
+    {$1 => $pos} : undef;
 }
 
 sub element
@@ -57,8 +66,8 @@ sub element
   return (list $in or token $in);
 }
 
-sub lparen { ${$_[0]} =~ /\G\(/gc; }
-sub rparen { ${$_[0]} =~ /\G\)/gc; }
+sub lparen { ${$_[0]} =~ /\G$lparen/gc; }
+sub rparen { ${$_[0]} =~ /\G$rparen/gc; }
 
 sub list
 {
@@ -108,6 +117,18 @@ sub parse
 
   return (end $in) ? $list
     : fail $in, 'Extra characters';
+}
+
+sub compile
+{
+  my ($ast) = @_;
+
+  if (ref $ast eq 'ARRAY')
+  {
+  }
+  elsif (ref $ast eq 'HASH')
+  {
+  }
 }
 
 1;

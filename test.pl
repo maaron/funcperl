@@ -17,8 +17,7 @@ sub run
 
   # Perform a type check
   $e->type;
-
-  $e->compile->(@args);
+  $e->compile()->(@args);
 }
 
 my $scalar = type('scalar');
@@ -158,6 +157,18 @@ print "if 0 then 1 else 2 = ".run(application(cond($scalar), $false,
 print "if 1 then 1 else 2 = ".run(application(cond($scalar), $true, 
     nullary_constant('one'), nullary_constant('two')))."\n";
 
-my $lisp_code = q{(asdf (qwer (asdf qwer) zxcv))};
+my $lisp_code = q{[asdf ["qwer \"asdf" [asdf qwer] zxcv]]};
 
 print Dumper(lisp::parse $lisp_code);
+
+my $glob = *print_foo;
+print "Function defined: ".!!(*{$glob}{CODE})."\n";
+my $code = $print_foo->compile->();
+*print_foo = \&$code;
+print "Function defined: ".!!(*{$glob}{CODE})."\n";
+my $crap = sub { print "crap\n"; };
+#*print_foo = \&$crap;
+
+print_foo();
+
+# Type Function tests

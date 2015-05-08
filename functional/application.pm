@@ -29,12 +29,7 @@ sub type
 {
   my ($a) = @_;
 
-  my $lhs = $a->{left};
-  my $rhs = $a->{right};
-
-  my $ltype = $lhs->type;
-  my $rtype = $rhs->type;
-  return $ltype->apply($rtype);
+  return $a->{left}->type()->apply($a->{right}->type);
 }
 
 sub compile
